@@ -3,6 +3,9 @@ import time
 
 
 def is_prime(number: int) -> bool:
+    """
+    Check if if a number is prime, using the 6k ± 1 optimization. 
+    """
     if number <= 3:
         return number > 1
     if number % 2 == 0 or number % 3 == 0:
@@ -16,6 +19,9 @@ def is_prime(number: int) -> bool:
 
 
 def get_primer_number() -> int:
+    """
+    Given a 20 bits random number, returns the one that is prime. 
+    """
     while True:
         number = random.getrandbits(20)
         if is_prime(number):
@@ -102,7 +108,10 @@ def fast_exp(num, e, mod):
     return num
 
 
-def rsa_main():
+def rsa_generator():
+    """
+    Main handler to generate RSA secure id. 
+    """
     p_pseudo_random_1 = get_primer_number()
     q_pseudo_random_2 = get_primer_number()
     mod_n = p_pseudo_random_1 * q_pseudo_random_2
@@ -125,13 +134,9 @@ def rsa_main():
     return mod_n, public_key, private_key
 
 
-def main():
+def generate_values_for_rsa():
     n, public_key, private_key = rsa_main()
     pin = random.randint(1111, 9999)
     encrypted_pin = fast_exp_handler(pin, public_key, n)
     decrypted_pin = fast_exp_handler(encrypted_pin, private_key, n)
     return encrypted_pin, decrypted_pin, pin
-
-
-if __name__ == "__main__":
-    print(main())
