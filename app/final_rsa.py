@@ -132,4 +132,3 @@ def rsa_generator():
             break
 
     return mod_n, public_key, private_key
-
