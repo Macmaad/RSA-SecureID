@@ -133,10 +133,3 @@ def rsa_generator():
 
     return mod_n, public_key, private_key
 
-
-def generate_values_for_rsa():
-    n, public_key, private_key = rsa_main()
-    pin = random.randint(1111, 9999)
-    encrypted_pin = fast_exp_handler(pin, public_key, n)
-    decrypted_pin = fast_exp_handler(encrypted_pin, private_key, n)
-    return encrypted_pin, decrypted_pin, pin
