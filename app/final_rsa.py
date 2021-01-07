@@ -1,5 +1,8 @@
 import random
-import time
+from string import ascii_lowercase
+
+ALPHABET_VALUES = {letter: i for i, letter in enumerate(ascii_lowercase)}
+INVERTED_ALPHABET_VALUES = {i: letter for i, letter in enumerate(ascii_lowercase)}
 
 
 def is_prime(number: int) -> bool:
@@ -112,11 +115,11 @@ def rsa_generator():
     """
     Main handler to generate RSA secure id. 
     """
-    p_pseudo_random_1 = get_primer_number()
-    q_pseudo_random_2 = get_primer_number()
+    p_pseudo_random_1 = 17#get_primer_number()
+    q_pseudo_random_2 = 29#get_primer_number()
     mod_n = p_pseudo_random_1 * q_pseudo_random_2
     phi = (p_pseudo_random_1 - 1) * (q_pseudo_random_2 - 1)
-    public_key = 2 ** 16 + 1
+    public_key = 17 # 2 ** 16 + 1
     while True:
         i = 16
         if max_divisor(public_key, phi) == 1:
@@ -131,4 +134,41 @@ def rsa_generator():
             private_key = int(x / public_key)
             break
 
-    return mod_n, public_key, private_key
+    return mod_n, public_key, private_key, p_pseudo_random_1, q_pseudo_random_2
+
+
+def encrypt(values, mod_n, public_key):
+    encrypted_word = []
+    for value in values:
+        encrypted_word.append(fast_exp_handler(value, public_key, mod_n))
+    return encrypted_word
+
+
+def decrypt(values, mod_n, private_key):
+    decrypted_word = []
+    for value in values:
+        decrypted_word.append(fast_exp_handler(value, private_key, mod_n))
+    return decrypted_word
+
+
+def main():
+    mod_n, public_key, private_key, random_number_1, random_number_2 = rsa_generator()
+    print(f"Números utilizados: {random_number_1} y {random_number_2}")
+    print(f"Valor de n = {mod_n}")
+    print(f"Llave pública: {public_key}")
+    print(f"Llave privada: {private_key}")
+    plain_text = "computacion"
+    plain_values = [ALPHABET_VALUES[letter] for letter in plain_text]
+    print(f"Valores de la palabra sin encriptar: {plain_values}")
+    encrypted_values = encrypt(plain_values, mod_n, public_key)
+    print(f"Valores encriptados: {encrypted_values}")
+    encrypted_word = [INVERTED_ALPHABET_VALUES[value % 26] for value in encrypted_values]
+    print(f"Text encriptado: {''.join(encrypted_word)}")
+    decrypted_values = decrypt(encrypted_values, mod_n, private_key)
+    print(f"Valores de la palabra original {decrypted_values}")
+    decrypted_word = [INVERTED_ALPHABET_VALUES[value] for value in decrypted_values]
+    print(f"Texto original: {''.join(decrypted_word)}")
+
+
+if __name__ == '__main__':
+    main()
