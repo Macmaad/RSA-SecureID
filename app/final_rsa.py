@@ -115,11 +115,11 @@ def rsa_generator():
     """
     Main handler to generate RSA secure id. 
     """
-    p_pseudo_random_1 = 17#get_primer_number()
-    q_pseudo_random_2 = 29#get_primer_number()
+    p_pseudo_random_1 = get_primer_number()
+    q_pseudo_random_2 = get_primer_number()
     mod_n = p_pseudo_random_1 * q_pseudo_random_2
     phi = (p_pseudo_random_1 - 1) * (q_pseudo_random_2 - 1)
-    public_key = 17 # 2 ** 16 + 1
+    public_key = 2 ** 16 + 1
     while True:
         i = 16
         if max_divisor(public_key, phi) == 1:
